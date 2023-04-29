@@ -11,7 +11,8 @@ public class GameException : Exception
 [Serializable]
 public class NotEnoughPlayers : GameException
 {
-    public NotEnoughPlayers() {}
-    public NotEnoughPlayers(string message) : base(message) {}
-    public NotEnoughPlayers(string message, Exception inner) : base(message, inner) {}
+    public NotEnoughPlayers(
+        int inputtedTotalPlayers,
+        int minimumPlayers
+    ): base($"Can't have a game with {inputtedTotalPlayers} players. (minimum is {minimumPlayers})") {}
 }

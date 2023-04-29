@@ -11,7 +11,9 @@ public class BoardException : Exception
 [Serializable]
 public class InvalidBoardSize : BoardException
 {
-    public InvalidBoardSize() {}
-    public InvalidBoardSize(string message) : base(message) {}
-    public InvalidBoardSize(string message, Exception inner) : base(message, inner) {}
+    public InvalidBoardSize(
+        int inputtedWidth,
+        int inputtedHeight,
+        int minimum
+    ): base($"Can't make a board with {inputtedWidth} by {inputtedHeight}, minimum is {minimum} by {minimum}") {}
 }

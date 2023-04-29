@@ -55,7 +55,7 @@ public class Square
     {
         // Check if the neighbor already has a connection
         if (square.HasConnection(position.Invert()))
-            throw new AlreadyConnected();
+            throw new AlreadyConnected(position);
         
         _neighbors[position] = square;
         _lines.Remove(position);

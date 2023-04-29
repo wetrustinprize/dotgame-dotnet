@@ -8,6 +8,8 @@ namespace DotGameLogic;
 /// </summary>
 public class Board
 {
+    public const int MinimumSize = 2;
+    
     public int Height { get; }
     public int Width { get; }
 
@@ -18,7 +20,7 @@ public class Board
     public Board(int height, int width)
     {
         if (height <= 1 || width <= 1)
-            throw new InvalidBoardSize();
+            throw new InvalidBoardSize(height, width, MinimumSize);
         
         Height = height;
         Width = width;

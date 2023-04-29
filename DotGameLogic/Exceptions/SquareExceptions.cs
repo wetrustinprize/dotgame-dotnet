@@ -1,3 +1,5 @@
+using DotGameLogic.Enums;
+
 namespace DotGameLogic.Exceptions;
 
 [Serializable]
@@ -11,7 +13,7 @@ public class SquareException : Exception
 [Serializable]
 public class AlreadyConnected : SquareException
 {
-    public AlreadyConnected() {}
-    public AlreadyConnected(string message) : base(message) {}
-    public AlreadyConnected(string message, Exception inner) : base(message, inner) {}
+    public AlreadyConnected(
+        Position tryingToConnect
+    ) : base($"Can't connect {tryingToConnect} to a square which {tryingToConnect.Invert()} is already connected") {}
 }

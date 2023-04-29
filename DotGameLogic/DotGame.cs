@@ -7,6 +7,8 @@ namespace DotGameLogic;
 /// </summary>
 public class DotGame
 {
+    public const int MinimumPlayers = 2;
+
     public int TotalPlayers { get; }
     public int CurrentPlayer { get; }
     public Board Board { get; }
@@ -19,8 +21,8 @@ public class DotGame
     /// <param name="initialPlayers">The amount of players in this game</param>
     public DotGame(int height, int width, int initialPlayers = 2)
     {
-        if (initialPlayers <= 0)
-            throw new NotEnoughPlayers();
+        if (initialPlayers <= 1)
+            throw new NotEnoughPlayers(initialPlayers, MinimumPlayers);
 
         Board = new Board(height, width);
         TotalPlayers = initialPlayers;
