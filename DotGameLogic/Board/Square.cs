@@ -4,19 +4,14 @@ namespace DotGameLogic.Board;
 
 public class Square
 {
-    #region Lines
-
-    private Dictionary<Position, Square> Neighbors { get; } = new();
-
-    private Dictionary<Position, int> Lines { get; } = new()
+    private readonly Dictionary<Position, Square> _neighbors = new();
+    private readonly Dictionary<Position, int> _lines = new()
     {
         { Position.Top, -1 },
         { Position.Bottom, -1 },
         { Position.Left, -1 },
         { Position.Right, -1 }
     };
-
-    #endregion
 
     /// <summary>
     /// Connects two squares.
@@ -34,8 +29,8 @@ public class Square
         if (square.HasConnection(position.Invert()))
             throw new AlreadyConnected();
         
-        Neighbors[position] = square;
-        Lines.Remove(position);
+        _neighbors[position] = square;
+        _lines.Remove(position);
     }
     
     /// <summary>
@@ -43,7 +38,7 @@ public class Square
     /// </summary>
     /// <param name="position">The position to check the connection</param>
     /// <returns>True if has a connection</returns>
-    public bool HasConnection(Position position) => Neighbors.ContainsKey(position);
+    public bool HasConnection(Position position) => _neighbors.ContainsKey(position);
 
     /// <summary>
     /// Sets the owner of the line in the specific position.
@@ -53,10 +48,10 @@ public class Square
     public void SetLine(Position position, int player)
     {
         // Check if has neighbor in that position
-        if (Neighbors.TryGetValue(position, out var neighbor))
+        if (_neighbors.TryGetValue(position, out var neighbor))
             neighbor.SetLine(position, player);
         else
-            Lines[position] = player;
+            _lines[position] = player;
     }
     
     /// <summary>
@@ -66,8 +61,8 @@ public class Square
     /// <returns>The owner player index</returns>
     public int GetLine(Position position)
     {
-        return Neighbors.TryGetValue(position, out var neighbor)
+        return _neighbors.TryGetValue(position, out var neighbor)
             ? neighbor.GetLine(position.Invert())
-            : Lines[position];
+            : _lines[position];
     }
 }
