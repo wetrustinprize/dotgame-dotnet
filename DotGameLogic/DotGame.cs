@@ -1,18 +1,16 @@
-using DotGameLogic.DotGame.Exceptions;
+using DotGameLogic.Exceptions;
 
-namespace DotGameLogic.DotGame;
+namespace DotGameLogic;
 
 /// <summary>
 /// The main class for a DotGame.
 /// </summary>
 public class DotGame
 {
-    public int Height { get; }
-    public int Width { get; }
-    
     public int TotalPlayers { get; }
-    public int CurrentPlayer { get; set; }
-
+    public int CurrentPlayer { get; }
+    public Board Board { get; }
+    
     /// <summary>
     /// Create a new DotGame.
     /// </summary>
@@ -23,9 +21,8 @@ public class DotGame
     {
         if (initialPlayers <= 0)
             throw new NotEnoughPlayers();
-        
-        Height = height;
-        Width = width;
+
+        Board = new Board(height, width);
         TotalPlayers = initialPlayers;
         CurrentPlayer = 0;
     }

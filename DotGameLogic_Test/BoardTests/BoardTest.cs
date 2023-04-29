@@ -1,5 +1,5 @@
-using DotGameLogic.Board;
-using DotGameLogic.Board.Exceptions;
+using DotGameLogic;
+using DotGameLogic.Exceptions;
 
 namespace DotGameLogic_Test.BoardTests;
 

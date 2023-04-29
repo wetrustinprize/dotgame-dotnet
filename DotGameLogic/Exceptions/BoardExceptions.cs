@@ -1,4 +1,4 @@
-namespace DotGameLogic.Board.Exceptions;
+namespace DotGameLogic.Exceptions;
 
 [Serializable]
 public class BoardException : Exception

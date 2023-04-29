@@ -1,6 +1,7 @@
-using DotGameLogic.Board.Exceptions;
+using DotGameLogic.Enums;
+using DotGameLogic.Exceptions;
 
-namespace DotGameLogic.Board;
+namespace DotGameLogic;
 
 public class Square
 {

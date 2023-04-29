@@ -1,4 +1,4 @@
-namespace DotGameLogic.Board;
+namespace DotGameLogic.Enums;
 
 public enum Position
 {
