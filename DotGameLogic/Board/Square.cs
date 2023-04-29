@@ -4,6 +4,8 @@ namespace DotGameLogic.Board;
 
 public class Square
 {
+    #region Private
+    
     private readonly Dictionary<Position, Square> _neighbors = new();
     private readonly Dictionary<Position, int> _lines = new()
     {
@@ -12,6 +14,31 @@ public class Square
         { Position.Left, -1 },
         { Position.Right, -1 }
     };
+
+    #endregion
+    
+    /// <summary>
+    /// The owner player index of this square.
+    /// </summary>
+    public int Owner { get; private set; } = -1;
+    
+    /// <summary>
+    /// The square has all lines completed or has an owner.
+    /// </summary>
+    public bool IsCompleted
+    {
+        get
+        {
+            if (Owner != -1) return true;
+
+            var top = GetLine(Position.Top) != -1;
+            var bottom = GetLine(Position.Bottom) != -1;
+            var left = GetLine(Position.Left) != -1;
+            var right = GetLine(Position.Right) != -1;
+            
+            return top && bottom && left && right;
+        }
+    }
 
     /// <summary>
     /// Connects two squares.
@@ -52,6 +79,9 @@ public class Square
             neighbor.SetLine(position, player);
         else
             _lines[position] = player;
+
+        if (IsCompleted)
+            Owner = player;
     }
     
     /// <summary>

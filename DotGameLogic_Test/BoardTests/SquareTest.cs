@@ -30,4 +30,17 @@ public class SquareTest
         bottom.ConnectSquare(Position.Top, top);
         top.ConnectSquare(Position.Bottom, bottom);
     }
+
+    [TestMethod]
+    public void SettingLine_OnCompleteSquare_MakesWinner()
+    {
+        var square = new Square();
+        
+        square.SetLine(Position.Top, 1);
+        square.SetLine(Position.Bottom, 1);
+        square.SetLine(Position.Left, 1);
+        square.SetLine(Position.Right, 1);
+        
+        Assert.AreEqual(1, square.Owner);
+    }
 }
