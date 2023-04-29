@@ -39,8 +39,8 @@ public class SquareTest
         square.SetLine(Position.Top, 1);
         square.SetLine(Position.Bottom, 1);
         square.SetLine(Position.Left, 1);
-        square.SetLine(Position.Right, 1);
         
+        Assert.IsTrue(square.SetLine(Position.Right, 1));
         Assert.AreEqual(1, square.Owner);
     }
 }

@@ -72,7 +72,8 @@ public class Square
     /// </summary>
     /// <param name="position">The position to set the owner to</param>
     /// <param name="player">The owner player index</param>
-    public void SetLine(Position position, int player)
+    /// <returns>True if setting this line made the player the Owner</returns>
+    public bool SetLine(Position position, int player)
     {
         // Check if has neighbor in that position
         if (_neighbors.TryGetValue(position, out var neighbor))
@@ -82,6 +83,8 @@ public class Square
 
         if (IsCompleted)
             Owner = player;
+
+        return IsCompleted;
     }
     
     /// <summary>
