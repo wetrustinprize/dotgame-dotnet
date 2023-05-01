@@ -4,6 +4,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotGameLogic", "DotGameLogi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotGameLogic_Test", "DotGameLogic_Test\DotGameLogic_Test.csproj", "{D3B20F2C-6066-4211-AEF6-60FC54DC9557}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotGameOrleans", "DotGameOrleans\DotGameOrleans.csproj", "{C077A68E-EC14-4B45-ABBB-EC4E9F7B45BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotGameGraphQL", "DotGameGraphQL\DotGameGraphQL.csproj", "{160E09A3-896F-498B-B5D5-094F3C6F717B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{D3B20F2C-6066-4211-AEF6-60FC54DC9557}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3B20F2C-6066-4211-AEF6-60FC54DC9557}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3B20F2C-6066-4211-AEF6-60FC54DC9557}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C077A68E-EC14-4B45-ABBB-EC4E9F7B45BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C077A68E-EC14-4B45-ABBB-EC4E9F7B45BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C077A68E-EC14-4B45-ABBB-EC4E9F7B45BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C077A68E-EC14-4B45-ABBB-EC4E9F7B45BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{160E09A3-896F-498B-B5D5-094F3C6F717B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{160E09A3-896F-498B-B5D5-094F3C6F717B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{160E09A3-896F-498B-B5D5-094F3C6F717B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{160E09A3-896F-498B-B5D5-094F3C6F717B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
