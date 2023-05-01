@@ -7,7 +7,12 @@ public class SessionGrainState
     public string Username { get; set; }
 
     [Id(1)]
-    public bool IsInitialized { get; set; } = false;
+    public bool IsInitialized { get; set; }
+    
+    public SessionGrainState(string username)
+    {
+        Username = username;
+    }
 }
 
 public interface ISessionGrain : IGrainWithGuidKey

@@ -20,10 +20,9 @@ public class SessionMutation
         var sessionId = Guid.NewGuid();
         var sessionGrain = _grainFactory.GetGrain<ISessionGrain>(sessionId);
 
-        sessionGrain.Init(new()
-        {
-            Username = username
-        });
+        var sessionState = new SessionGrainState(username);
+        
+        sessionGrain.Init(sessionState);
         return Task.FromResult(sessionId);
     }
 }
