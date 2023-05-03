@@ -6,9 +6,6 @@ public class SessionGrainState
     [Id(0)]
     public string Username { get; set; }
 
-    [Id(1)]
-    public bool IsInitialized { get; set; }
-    
     public SessionGrainState(string username)
     {
         Username = username;
