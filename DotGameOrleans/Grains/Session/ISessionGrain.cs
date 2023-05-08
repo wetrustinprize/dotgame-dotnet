@@ -3,13 +3,9 @@ namespace DotGameOrleans.Grains.Interfaces;
 [GenerateSerializer]
 public class SessionGrainState
 {
-    [Id(0)]
-    public string Username { get; set; }
+    [Id(0)] public string Username { get; set; } = "";
 
-    public SessionGrainState(string username)
-    {
-        Username = username;
-    }
+    [Id(1)] public bool Initialized { get; set; }
 }
 
 public interface ISessionGrain : IGrainWithGuidKey
@@ -17,8 +13,8 @@ public interface ISessionGrain : IGrainWithGuidKey
     /// <summary>
     /// Initialize the session grain with the given state.
     /// </summary>
-    /// <param name="state">The state of the new session</param>
-    public Task Init(SessionGrainState state);
+    /// <param name="username">The session's username</param>
+    public Task Init(string username);
     
     /// <summary>
     /// Gets the current state of a session

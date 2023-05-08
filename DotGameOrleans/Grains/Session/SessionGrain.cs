@@ -1,11 +1,11 @@
 using DotGameOrleans.Grains.Interfaces;
+using DotGameOrleans.Grains.Session;
 
 namespace DotGameOrleans.Grains;
 
-public class SessionGrain : Grain, ISessionGrain
+public class SessionGrain : Grain<SessionGrainState>, ISessionGrain
 {
     private readonly ILogger _logger;
-    private SessionGrainState? _state;
     
     public SessionGrain(ILogger<SessionGrain> logger)
     {
@@ -14,9 +14,13 @@ public class SessionGrain : Grain, ISessionGrain
         _logger.LogDebug($"New state with grain id {this.GetPrimaryKey()}");
     }
 
-    public Task Init(SessionGrainState state)
+    public Task Init(string username)
     {
-        _state = state;
+        State = new SessionGrainState
+        {
+            Username = username,
+            Initialized = true
+        };
         
         _logger.LogDebug($"Setting new state with grain id {this.GetPrimaryKey()}");
         return Task.CompletedTask;
@@ -24,9 +28,9 @@ public class SessionGrain : Grain, ISessionGrain
 
     public Task<SessionGrainState> GetState()
     {
-        if (_state == null)
-            throw new Exception($"State from grain {this.GetPrimaryKey()} is null");
+        if (!State.Initialized)
+            throw new SessionNotInitilized(this.GetPrimaryKey().ToString());
         
-        return Task.FromResult(_state);
+        return Task.FromResult(State);
     }
 }
