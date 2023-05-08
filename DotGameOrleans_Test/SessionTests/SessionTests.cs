@@ -1,4 +1,5 @@
 using DotGameOrleans.Grains.Interfaces;
+using DotGameOrleans.Grains.Session;
 using Orleans.TestingHost;
 
 namespace DotGameOrleans_Test.SessionTests;
@@ -10,14 +11,15 @@ public class SessionTests
     
     public SessionTests()
     {
-        var builder = new TestClusterBuilder();
+        var builder = new TestClusterBuilder()
+            .AddSiloBuilderConfigurator<TestSiloConfigurator>();
         
         _cluster = builder.Build();
         _cluster.Deploy();
     }
     
     [TestMethod]
-    [ExpectedException(typeof(Exception))]
+    [ExpectedException(typeof(SessionNotInitilized))]
     public async Task NewSession_ShouldNotBeInitialized()
     {
         var grain = _cluster.GrainFactory.GetGrain<ISessionGrain>(Guid.NewGuid());
