@@ -17,12 +17,13 @@ public class SessionQuery
         _grainFactory = grainFactory;
     }
 
+    [GraphQLDescription("Gets the session ID information")]
     public async Task<SessionStateType> GetMe(Guid session)
     {
         var sessionGrain = _grainFactory.GetGrain<ISessionGrain>(session);
         var state = await sessionGrain.GetState();
 
-        if (!state.IsInitialized)
+        if (state == null)
             throw new GraphQLException(SessionErrors.SessionNotFound);
         
         return new SessionStateType

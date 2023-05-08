@@ -15,14 +15,13 @@ public class SessionMutation
         _grainFactory = grainFactory;
     }
 
+    [GraphQLDescription("Returns a new session ID with the given username.")]
     public Task<Guid> CreateSession(string username)
     {
         var sessionId = Guid.NewGuid();
         var sessionGrain = _grainFactory.GetGrain<ISessionGrain>(sessionId);
 
-        var sessionState = new SessionGrainState(username);
-        
-        sessionGrain.Init(sessionState);
+        sessionGrain.Init(username);
         return Task.FromResult(sessionId);
     }
 }
