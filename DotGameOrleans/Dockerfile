@@ -1,0 +1,20 @@
+﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+WORKDIR /src
+COPY ["Orleans/DotGameOrleans/DotGameOrleans.csproj", "Orleans/DotGameOrleans/"]
+RUN dotnet restore "Orleans/DotGameOrleans/DotGameOrleans.csproj"
+COPY . .
+WORKDIR "/src/DotGameOrleans"
+RUN dotnet build "DotGameOrleans.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "DotGameOrleans.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "DotGameOrleans.dll"]
