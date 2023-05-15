@@ -1,7 +1,13 @@
-using DotGameOrleans.Grains;
+using System.Diagnostics;
+using System.Reflection;
 using DotGameOrleans.Grains.Interfaces;
 using DotGameOrleans.Grains.Lobby;
 using DotGameOrleans.Grains.Session;
+using Microsoft.OpenApi.Models;
+
+var assembly = Assembly.GetExecutingAssembly();
+var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+var version = fileVersionInfo.ProductVersion;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +26,12 @@ builder.Services.AddSwaggerGen(c =>
 {
     var filePath = Path.Combine(AppContext.BaseDirectory, "RestfulAPI.xml");
     c.IncludeXmlComments(filePath);
+    c.SwaggerDoc(version, new OpenApiInfo
+    {
+        Title = "DotGame Restful",
+        Description = "DotGame restful interface.",
+        Version = version
+    });
 });
 
 var app = builder.Build();
@@ -27,8 +39,8 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-    options.RoutePrefix = String.Empty;
+    options.SwaggerEndpoint($"/swagger/{version}/swagger.json", version);
+    options.RoutePrefix = string.Empty;
 });
 app.UseHttpsRedirection();
 app.UseAuthorization();
