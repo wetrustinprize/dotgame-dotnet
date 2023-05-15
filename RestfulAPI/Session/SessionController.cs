@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace RestfulAPI.Session;
 
+[Route("api/[controller]")]
 [ApiController]
-[Route("session")]
 public class SessionController : Controller
 {
     private readonly ILogger<SessionController> _logger;
@@ -43,7 +43,7 @@ public class SessionController : Controller
     /// <param name="sessionId">The session GUID to get the information from</param>
     /// <returns>The information about the session in response format</returns>
     /// <response code="200">Returns the information about the session</response>
-    [HttpGet("/{sessionId:guid}")]
+    [HttpGet("{sessionId:guid}")]
     [ProducesResponseType(typeof(GetSessionResponse), statusCode: 200)]
     public async Task<GetSessionResponse> GetSession(Guid sessionId)
     {
