@@ -20,6 +20,7 @@ builder.Host.UseOrleans(siloBuilder =>
     siloBuilder.AddMemoryGrainStorageAsDefault();
 });
 
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
