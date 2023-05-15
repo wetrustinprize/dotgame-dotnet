@@ -1,7 +1,7 @@
 using DotGameOrleans.Grains.Interfaces;
-using DotGameOrleans.Grains.Session;
+using Microsoft.Extensions.Logging;
 
-namespace DotGameOrleans.Grains;
+namespace DotGameOrleans.Grains.Session;
 
 public class SessionGrain : Grain<SessionGrainState>, ISessionGrain
 {

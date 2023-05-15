@@ -1,9 +1,19 @@
+using DotGameOrleans.Grains;
+using DotGameOrleans.Grains.Interfaces;
+using DotGameOrleans.Grains.Lobby;
+using DotGameOrleans.Grains.Session;
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOrleansClient(clientBuilder =>
+builder.Services.AddTransient<ILobbyGrain, LobbyGrain>();
+builder.Services.AddTransient<ISessionGrain, SessionGrain>();
+
+builder.Host.UseOrleans(siloBuilder =>
 {
-    clientBuilder.UseLocalhostClustering();
+    siloBuilder.UseLocalhostClustering();
+    siloBuilder.AddMemoryGrainStorageAsDefault();
 });
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

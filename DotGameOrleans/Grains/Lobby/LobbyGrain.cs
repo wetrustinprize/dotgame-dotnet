@@ -1,7 +1,8 @@
 using DotGameLogic;
 using DotGameOrleans.Grains.Interfaces;
+using Microsoft.Extensions.Logging;
 
-namespace DotGameOrleans.Grains;
+namespace DotGameOrleans.Grains.Lobby;
 
 public class LobbyGrain : Grain, ILobbyGrain
 {
