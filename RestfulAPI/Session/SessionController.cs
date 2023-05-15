@@ -1,11 +1,13 @@
 using DotGameOrleans.Grains.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
+// ReSharper disable UnusedMember.Global
+
 namespace RestfulAPI.Session;
 
 [ApiController]
 [Route("session")]
-public class SessionController
+public class SessionController : Controller
 {
     private readonly ILogger<SessionController> _logger;
     private readonly IGrainFactory _grainFactory;
@@ -15,9 +17,9 @@ public class SessionController
         _logger = logger;
         _grainFactory = grainFactory;
     }
-    
+
     /// <summary>
-    /// Generates a new session with a unique guid
+    /// Generates a new session with a unique GUID
     /// </summary>
     /// <remarks>
     /// This session guid is used to identify the player in the game
@@ -25,14 +27,32 @@ public class SessionController
     /// <param name="data">The information about the player</param>
     /// <returns>The session guid</returns>
     /// <response code="200">Returns the session guid</response>
-    [HttpPost(Name = "createSession")]
-    [ProducesResponseType(typeof(Guid), 200)]
-    public Guid CreateSession([FromBody] NewSessionDto data)
+    [HttpPost]
+    public async Task<Guid> CreateSession([FromBody] NewSessionDto data)
     {
         var sessionId = Guid.NewGuid();
         var grain = _grainFactory.GetGrain<ISessionGrain>(sessionId);
 
-        grain.Init(data.Username);
+        await grain.Init(data.Username);
         return sessionId;
+    }
+
+    /// <summary>
+    /// Gets the information about a session
+    /// </summary>
+    /// <param name="sessionId">The session GUID to get the information from</param>
+    /// <returns>The information about the session in response format</returns>
+    /// <response code="200">Returns the information about the session</response>
+    [HttpGet("/{sessionId:guid}")]
+    [ProducesResponseType(typeof(GetSessionResponse), statusCode: 200)]
+    public async Task<GetSessionResponse> GetSession(Guid sessionId)
+    {
+        var grain = _grainFactory.GetGrain<ISessionGrain>(sessionId);
+        var state = await grain.GetState();
+
+        return new GetSessionResponse
+        {
+            Username = state.Username
+        };
     }
 }

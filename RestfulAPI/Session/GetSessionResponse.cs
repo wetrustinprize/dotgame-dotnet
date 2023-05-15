@@ -2,10 +2,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RestfulAPI.Session;
 
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+
 /// <summary>
-/// Information needed to create a new session GUID
+/// Response for getting information about a session GUID
 /// </summary>
-public class NewSessionDto
+public class GetSessionResponse
 {
     /// <summary>
     /// The display name of the player.
