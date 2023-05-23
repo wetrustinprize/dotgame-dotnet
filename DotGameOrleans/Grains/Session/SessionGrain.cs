@@ -14,6 +14,20 @@ public class SessionGrain : Grain<SessionGrainState>, ISessionGrain
         _logger.LogDebug($"New state with grain id {this.GetPrimaryKey()}");
     }
 
+    #region Checkers
+
+    /// <summary>
+    /// Checks if this grain was initialized
+    /// </summary>
+    /// <exception cref="SessionNotInitilized">Raises if there was no initialization</exception>
+    private void CheckInitialized()
+    {
+        if (!State.Initialized)
+            throw new SessionNotInitilized(this.GetPrimaryKey().ToString());
+    }
+
+    #endregion
+
     public Task Init(string username)
     {
         State = new SessionGrainState
@@ -21,16 +35,15 @@ public class SessionGrain : Grain<SessionGrainState>, ISessionGrain
             Username = username,
             Initialized = true
         };
-        
+
         _logger.LogDebug($"Setting new state with grain id {this.GetPrimaryKey()}");
         return Task.CompletedTask;
     }
 
     public Task<SessionGrainState> GetState()
     {
-        if (!State.Initialized)
-            throw new SessionNotInitilized(this.GetPrimaryKey().ToString());
-        
+        CheckInitialized();
+
         return Task.FromResult(State);
     }
 }
