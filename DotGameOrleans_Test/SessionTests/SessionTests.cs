@@ -1,4 +1,3 @@
-using DotGameOrleans.Grains.Interfaces;
 using DotGameOrleans.Grains.Session;
 using Orleans.TestingHost;
 
