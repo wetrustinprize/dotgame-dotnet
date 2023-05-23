@@ -10,7 +10,7 @@ namespace RestfulAPI.Session;
 public class GetSessionResponse
 {
     /// <summary>
-    /// The display name of the player.
+    /// The display name of the session.
     /// </summary>
     [Required]
     public string Username { get; set; } = null!;
