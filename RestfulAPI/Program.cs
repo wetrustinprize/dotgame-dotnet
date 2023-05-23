@@ -3,6 +3,7 @@ using System.Reflection;
 using DotGameOrleans.Grains.Lobby;
 using DotGameOrleans.Grains.Session;
 using Microsoft.OpenApi.Models;
+using RestfulAPI.Filters;
 
 var assembly = Assembly.GetExecutingAssembly();
 var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
@@ -20,7 +21,7 @@ builder.Host.UseOrleans(siloBuilder =>
 });
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => { options.Filters.Add<SessionExceptionsFilters>(); });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
