@@ -1,11 +1,13 @@
-namespace DotGameOrleans.Grains.Interfaces;
+namespace DotGameOrleans.Grains.Session;
 
 [GenerateSerializer]
 public class SessionGrainState
 {
-    [Id(0)] public string Username { get; set; } = "";
+    [Id(0)] public string Username { get; init; } = "";
 
-    [Id(1)] public bool Initialized { get; set; }
+    [Id(1)] public bool Initialized { get; init; }
+    
+    [Id(2)] public List<Guid> Lobbies { get; } = new();
 }
 
 public interface ISessionGrain : IGrainWithGuidKey
@@ -19,5 +21,12 @@ public interface ISessionGrain : IGrainWithGuidKey
     /// <summary>
     /// Gets the current state of a session
     /// </summary>
+    /// <exception cref="SessionNotInitilized">If this grain was not been initialized yet</exception>
     public Task<SessionGrainState> GetState();
+    
+    /// <summary>
+    /// Adds a new lobby to the session
+    /// </summary>
+    /// <param name="lobbyId">The lobby to be added</param>
+    public Task AddLobby(Guid lobbyId);
 }

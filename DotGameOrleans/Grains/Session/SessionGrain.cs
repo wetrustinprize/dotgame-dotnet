@@ -1,4 +1,3 @@
-using DotGameOrleans.Grains.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace DotGameOrleans.Grains.Session;
@@ -45,5 +44,12 @@ public class SessionGrain : Grain<SessionGrainState>, ISessionGrain
         CheckInitialized();
 
         return Task.FromResult(State);
+    }
+
+    public Task AddLobby(Guid lobbyId)
+    {
+        State.Lobbies.Add(lobbyId);
+
+        return Task.CompletedTask;
     }
 }
