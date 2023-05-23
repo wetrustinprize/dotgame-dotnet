@@ -21,9 +21,6 @@ public class SessionController : Controller
     /// <summary>
     /// Generates a new session with a unique GUID
     /// </summary>
-    /// <remarks>
-    /// This session guid is used to identify the player in the game
-    /// </remarks>
     /// <param name="data">The information about the player</param>
     /// <returns>The session guid</returns>
     /// <response code="200">Returns the session guid</response>
@@ -40,14 +37,14 @@ public class SessionController : Controller
     /// <summary>
     /// Gets the information about a session
     /// </summary>
-    /// <param name="sessionId">The session GUID to get the information from</param>
+    /// <param name="session">The session GUID to get the information from</param>
     /// <returns>The information about the session in response format</returns>
     /// <response code="200">Returns the information about the session</response>
-    [HttpGet("{sessionId:guid}")]
+    [HttpGet]
     [ProducesResponseType(typeof(GetSessionResponse), statusCode: 200)]
-    public async Task<GetSessionResponse> GetSession(Guid sessionId)
+    public async Task<GetSessionResponse> GetSession(Guid session)
     {
-        var grain = _grainFactory.GetGrain<ISessionGrain>(sessionId);
+        var grain = _grainFactory.GetGrain<ISessionGrain>(session);
         var state = await grain.GetState();
 
         return new GetSessionResponse
