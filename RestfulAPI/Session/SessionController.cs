@@ -1,4 +1,4 @@
-using DotGameOrleans.Grains.Interfaces;
+using DotGameOrleans.Grains.Session;
 using Microsoft.AspNetCore.Mvc;
 
 // ReSharper disable UnusedMember.Global
