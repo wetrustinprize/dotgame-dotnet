@@ -15,19 +15,39 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
         _grainFactory = grainFactory;
     }
 
+    #region Checkers
+
+    private void CheckInitialized()
+    {
+        if (!State.Initialized)
+            throw new LobbyNotInitialized(this.GetPrimaryKey().ToString());
+    }
+
+    #endregion
+
     public Task Init(Guid owner, int boardHeight, int boardWidth)
     {
         _logger.LogDebug($"Creating new lobby for user {owner}.");
-        
-        State.Owner = owner;
-        State.Board = new Board(boardHeight, boardWidth);
+
+        State = new LobbyGrainState
+        {
+            Initialized = true,
+            Owner = owner,
+            Board = new Board(boardHeight, boardWidth)
+        };
         State.Players.Add(owner);
 
         var ownerSession = _grainFactory.GetGrain<ISessionGrain>(owner);
         ownerSession.AddLobby(this.GetPrimaryKey());
-        
+
         return Task.CompletedTask;
     }
 
     public Task<Guid> GetOwner() => Task.FromResult(State.Owner);
+
+    public Task<LobbyGrainState> GetState()
+    {
+        CheckInitialized();
+        return Task.FromResult(State);
+    }
 }
