@@ -32,4 +32,17 @@ public class LobbyController : Controller
         
         return lobbyGuid;
     }
+
+    [HttpPost]
+    [Route("{lobby:guid}/join")]
+    public async Task<LobbyResponse> JoinLobby(Guid session, Guid lobby)
+    {
+        var lobbyGrain = _grainFactory.GetGrain<ILobbyGrain>(lobby);
+        var lobbyState = await lobbyGrain.GetState();
+
+        return new LobbyResponse
+        {
+            Players = lobbyState.Players
+        };
+    }
 }
