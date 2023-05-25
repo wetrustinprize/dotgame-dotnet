@@ -21,7 +21,7 @@ public interface ISessionGrain : IGrainWithGuidKey
     /// <summary>
     /// Gets the current state of a session
     /// </summary>
-    /// <exception cref="SessionNotInitilized">If this grain was not been initialized yet</exception>
+    /// <exception cref="SessionNotInitialized">If this grain was not been initialized yet</exception>
     public Task<SessionGrainState> GetState();
     
     /// <summary>

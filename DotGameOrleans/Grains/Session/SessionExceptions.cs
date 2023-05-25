@@ -19,9 +19,9 @@ public class SessionException : Exception
 
 [Serializable]
 [GenerateSerializer]
-public class SessionNotInitilized : SessionException
+public class SessionNotInitialized : SessionException
 {
-    public SessionNotInitilized(string grainId) : base($"Session with grain id {grainId} is not initialized")
+    public SessionNotInitialized(string grainId) : base($"Session with grain id {grainId} is not initialized")
     {
     }
 }

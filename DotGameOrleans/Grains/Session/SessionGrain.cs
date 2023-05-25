@@ -18,11 +18,11 @@ public class SessionGrain : Grain<SessionGrainState>, ISessionGrain
     /// <summary>
     /// Checks if this grain was initialized
     /// </summary>
-    /// <exception cref="SessionNotInitilized">Raises if there was no initialization</exception>
+    /// <exception cref="SessionNotInitialized">Raises if there was no initialization</exception>
     private void CheckInitialized()
     {
         if (!State.Initialized)
-            throw new SessionNotInitilized(this.GetPrimaryKey().ToString());
+            throw new SessionNotInitialized(this.GetPrimaryKey().ToString());
     }
 
     #endregion
@@ -42,7 +42,6 @@ public class SessionGrain : Grain<SessionGrainState>, ISessionGrain
     public Task<SessionGrainState> GetState()
     {
         CheckInitialized();
-
         return Task.FromResult(State);
     }
 
