@@ -18,7 +18,7 @@ public class SessionTests
     }
     
     [TestMethod]
-    [ExpectedException(typeof(SessionNotInitilized))]
+    [ExpectedException(typeof(SessionNotInitialized))]
     public async Task NewSession_ShouldNotBeInitialized()
     {
         var grain = _cluster.GrainFactory.GetGrain<ISessionGrain>(Guid.NewGuid());
