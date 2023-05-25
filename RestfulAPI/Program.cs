@@ -21,7 +21,11 @@ builder.Host.UseOrleans(siloBuilder =>
 });
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
-builder.Services.AddControllers(options => { options.Filters.Add<SessionExceptionsFilters>(); });
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<SessionExceptionsFilter>();
+    options.Filters.Add<LobbyExceptionsFilter>();
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
