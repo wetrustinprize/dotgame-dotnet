@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace RestfulAPI.Session;
+namespace RestfulAPI.Controllers.v1.Session;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 

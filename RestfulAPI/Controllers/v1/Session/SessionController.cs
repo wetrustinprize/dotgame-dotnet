@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 
 // ReSharper disable UnusedMember.Global
 
-namespace RestfulAPI.Session;
+namespace RestfulAPI.Controllers.v1.Session;
 
-[Route("api/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1.0")]
 [ApiController]
 public class SessionController : Controller
 {

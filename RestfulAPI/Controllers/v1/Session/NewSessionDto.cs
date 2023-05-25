@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace RestfulAPI.Session;
+namespace RestfulAPI.Controllers.v1.Session;
 
 /// <summary>
 /// Information needed to create a new session GUID

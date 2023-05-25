@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace RestfulAPI.Lobby;
+namespace RestfulAPI.Controllers.v1.Lobby;
 
 /// <summary>
 /// Information needed to create a new lobby

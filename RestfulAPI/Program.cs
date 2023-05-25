@@ -1,23 +1,20 @@
-using System.Diagnostics;
-using System.Reflection;
-using DotGameOrleans.Grains.Lobby;
-using DotGameOrleans.Grains.Session;
-using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.Options;
+using Orleans.Serialization;
 using RestfulAPI.Filters;
-
-var assembly = Assembly.GetExecutingAssembly();
-var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-var version = fileVersionInfo.ProductVersion;
+using RestfulAPI.SwaggerConfig;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddTransient<ILobbyGrain, LobbyGrain>();
-builder.Services.AddTransient<ISessionGrain, SessionGrain>();
-
-builder.Host.UseOrleans(siloBuilder =>
+builder.Host.UseOrleansClient(siloBuilder =>
 {
     siloBuilder.UseLocalhostClustering();
-    siloBuilder.AddMemoryGrainStorageAsDefault();
+    siloBuilder.Services.AddSerializer(serializerBuilder =>
+    {
+        serializerBuilder.AddJsonSerializer(isSupported: type =>
+            type.Namespace != null && type.Namespace.StartsWith("DotGameLogic"));
+    });
 });
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
@@ -27,25 +24,30 @@ builder.Services.AddControllers(options =>
     options.Filters.Add<LobbyExceptionsFilter>();
 });
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
+builder.Services.AddApiVersioning(options =>
 {
-    var filePath = Path.Combine(AppContext.BaseDirectory, "RestfulAPI.xml");
-    c.IncludeXmlComments(filePath);
-    c.SwaggerDoc(version, new OpenApiInfo
-    {
-        Title = "DotGame Restful",
-        Description = "DotGame restful interface.",
-        Version = version
-    });
+    options.ReportApiVersions = true;
+});
+    
+builder.Services.AddVersionedApiExplorer(options =>
+{
+    options.SubstituteApiVersionInUrl = true;
 });
 
+builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerConfigOptions>();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
+
+var versionDescProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
 
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
-    options.SwaggerEndpoint($"/swagger/{version}/swagger.json", version);
-    options.RoutePrefix = string.Empty;
+    foreach (var desc in versionDescProvider.ApiVersionDescriptions)
+    {
+        options.SwaggerEndpoint($"/swagger/{desc.GroupName}/swagger.json", $"DotGame - {desc.ApiVersion.ToString()}");
+    }
 });
 app.UseHttpsRedirection();
 app.UseAuthorization();

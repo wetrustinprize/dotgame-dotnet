@@ -1,10 +1,11 @@
 using DotGameOrleans.Grains.Lobby;
 using Microsoft.AspNetCore.Mvc;
 
-namespace RestfulAPI.Lobby;
+namespace RestfulAPI.Controllers.v1.Lobby;
 
-[Route("api/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
+[ApiVersion("1.0")]
 public class LobbyController : Controller
 {
     private readonly ILogger<LobbyController> _logger;
