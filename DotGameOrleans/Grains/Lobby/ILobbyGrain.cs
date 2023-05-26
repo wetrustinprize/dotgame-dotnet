@@ -30,9 +30,9 @@ public interface ILobbyGrain : IGrainWithGuidKey
     public Task Init(Guid owner, int boardHeight, int boardWidth);
     
     /// <summary>
-    /// Gets the lobby owner
+    /// Gets the lobby owner session
     /// </summary>
-    /// <returns>The owner's guid</returns>
+    /// <returns>The owner's session guid</returns>
     public Task<Guid> GetOwner();
     
     /// <summary>
@@ -47,4 +47,18 @@ public interface ILobbyGrain : IGrainWithGuidKey
     /// </summary>
     /// <exception cref="LobbyNotInitialized">If this grain was not been initialized yet</exception>
     public Task<LobbyGrainState> GetState();
+    
+    /// <summary>
+    /// Adds a session to the lobby
+    /// </summary>
+    /// <param name="session">The session GUID to be added</param>
+    /// <exception cref="LobbyAlreadyJoined">If the <paramref name="session"/> has already been added to this lobby</exception>
+    public void AddPlayer(Guid session);
+    
+    /// <summary>
+    /// Removes a session from the lobby
+    /// </summary>
+    /// <param name="session">The session GUID</param>
+    /// <exception cref="NotInLobby">If the <paramref name="session"/> wasn't in the lobby</exception>
+    public void RemovePlayer(Guid session);
 }
