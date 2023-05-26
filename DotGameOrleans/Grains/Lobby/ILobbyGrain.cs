@@ -36,6 +36,13 @@ public interface ILobbyGrain : IGrainWithGuidKey
     public Task<Guid> GetOwner();
     
     /// <summary>
+    /// Checks if the given session is the owner of this lobby
+    /// </summary>
+    /// <param name="session">The session GUID</param>
+    /// <returns></returns>
+    public Task<bool> IsOwner(Guid session);
+    
+    /// <summary>
     /// Gets the current state of a session
     /// </summary>
     /// <exception cref="LobbyNotInitialized">If this grain was not been initialized yet</exception>

@@ -43,7 +43,16 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
         return Task.CompletedTask;
     }
 
-    public Task<Guid> GetOwner() => Task.FromResult(State.Owner);
+    public Task<Guid> GetOwner()
+    {
+        CheckInitialized();
+        return Task.FromResult(State.Owner);
+    }
+
+    public Task<bool> IsOwner(Guid session) {
+        CheckInitialized();
+        return Task.FromResult(session == State.Owner);
+    }
 
     public Task<LobbyGrainState> GetState()
     {
