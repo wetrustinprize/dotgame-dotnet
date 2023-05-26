@@ -50,8 +50,7 @@ public class SessionController : Controller
 
         return new GetSessionResponse
         {
-            Username = state.Username,
-            Lobbies = state.Lobbies
+            Username = state.Username
         };
     }
 }

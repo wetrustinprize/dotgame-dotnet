@@ -14,10 +14,4 @@ public class GetSessionResponse
     /// </summary>
     [Required]
     public string Username { get; set; } = null!;
-    
-    /// <summary>
-    /// The lobbies this session is in.
-    /// </summary>
-    [Required]
-    public List<Guid> Lobbies { get; set; } = null!;
 }

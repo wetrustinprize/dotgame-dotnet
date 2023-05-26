@@ -6,8 +6,6 @@ public class SessionGrainState
     [Id(0)] public string Username { get; init; } = "";
 
     [Id(1)] public bool Initialized { get; init; }
-    
-    [Id(2)] public List<Guid> Lobbies { get; } = new();
 }
 
 public interface ISessionGrain : IGrainWithGuidKey
@@ -23,10 +21,4 @@ public interface ISessionGrain : IGrainWithGuidKey
     /// </summary>
     /// <exception cref="SessionNotInitialized">If this grain was not been initialized yet</exception>
     public Task<SessionGrainState> GetState();
-    
-    /// <summary>
-    /// Adds a new lobby to the session
-    /// </summary>
-    /// <param name="lobbyId">The lobby to be added</param>
-    public Task AddLobby(Guid lobbyId);
 }
