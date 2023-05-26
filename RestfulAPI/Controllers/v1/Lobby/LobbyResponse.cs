@@ -11,5 +11,5 @@ public class LobbyResponse
     /// The current players of this lobby
     /// </summary>
     [Required]
-    public List<Guid> Players { get; set; } = null!;
+    public HashSet<Guid> Players { get; set; } = null!;
 }

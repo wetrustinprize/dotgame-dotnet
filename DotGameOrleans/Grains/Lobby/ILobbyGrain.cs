@@ -11,7 +11,7 @@ public class LobbyGrainState
     [Id(4)] public LobbyStateEnum State { get; set; } = LobbyStateEnum.WaitingForPlayers;
     
     [Id(1)]
-    public List<Guid> Players { get; } = new();
+    public HashSet<Guid> Players { get; } = new();
     
     [Id(2)]
     public Guid Owner { get; init; } = Guid.Empty;
