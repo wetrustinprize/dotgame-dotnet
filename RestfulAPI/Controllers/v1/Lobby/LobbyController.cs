@@ -22,7 +22,8 @@ public class LobbyController : Controller
     /// </summary>
     /// <param name="session">The session GUID</param>
     /// <param name="data">The data for creating the new lobby</param>
-    /// <returns></returns>
+    /// <returns>The created lobby GUID</returns>
+    /// <response code="200">Returns the created lobby GUID</response>
     [HttpPost]
     public async Task<Guid> CreateLobby(Guid session, [FromBody] CreateLobbyDto data)
     {
@@ -34,6 +35,13 @@ public class LobbyController : Controller
         return lobbyGuid;
     }
 
+    /// <summary>
+    /// Joins a specific lobby
+    /// </summary>
+    /// <param name="session">The session GUID</param>
+    /// <param name="lobby">The lobby GUID to join</param>
+    /// <returns>The joined lobby information</returns>
+    /// <response code="200">Returns the joined lobby information</response>
     [HttpPost]
     [Route("{lobby:guid}/join")]
     public async Task<LobbyResponse> JoinLobby(Guid session, Guid lobby)
