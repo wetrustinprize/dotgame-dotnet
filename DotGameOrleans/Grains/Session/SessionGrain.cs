@@ -20,7 +20,7 @@ public class SessionGrain : Grain<SessionGrainState>, ISessionGrain
     private void CheckInitialized()
     {
         if (!State.Initialized)
-            throw new SessionNotInitialized(this.GetPrimaryKey().ToString());
+            throw new SessionNotInitialized(this.GetPrimaryKey());
     }
 
     #endregion
