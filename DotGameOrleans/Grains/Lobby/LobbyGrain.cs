@@ -56,6 +56,9 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
     public void AddPlayer(Guid session)
     {
         CheckInitialized();
+        if (State.State != LobbyStateEnum.WaitingForPlayers)
+            throw new LobbyInProgress(this.GetPrimaryKey());
+
         if (State.Players.Any(p => p == session))
             throw new LobbyAlreadyJoined(this.GetPrimaryKey(), session);
         

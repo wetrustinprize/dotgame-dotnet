@@ -53,6 +53,7 @@ public interface ILobbyGrain : IGrainWithGuidKey
     /// </summary>
     /// <param name="session">The session GUID to be added</param>
     /// <exception cref="LobbyAlreadyJoined">If the <paramref name="session"/> has already been added to this lobby</exception>
+    /// <exception cref="LobbyInProgress">If the lobby is already in progress</exception>
     public void AddPlayer(Guid session);
     
     /// <summary>
