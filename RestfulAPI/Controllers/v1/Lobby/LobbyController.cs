@@ -1,3 +1,5 @@
+using System.Net;
+using System.Web.Http;
 using DotGameOrleans.Grains.Lobby;
 using Microsoft.AspNetCore.Mvc;
 
@@ -52,6 +54,61 @@ public class LobbyController : Controller
         return new LobbyResponse
         {
             Players = lobbyState.Players
+        };
+    }
+    
+    /// <summary>
+    /// Leaves the specified lobby
+    /// </summary>
+    /// <param name="session">The session GUID</param>
+    /// <param name="lobby">The lobby GUID</param>
+    /// <response code="200">Left the lobby successfully</response>
+    [HttpPost]
+    [Route("{lobby:guid}/leave")]
+    public Task LeaveLobby(Guid session, Guid lobby)
+    {
+        var lobbyGrain = _grainFactory.GetGrain<ILobbyGrain>(lobby);
+        lobbyGrain.RemovePlayer(session);
+
+        return Task.CompletedTask;
+    }
+    
+    /// <summary>
+    /// Starts the game in the specified lobby
+    /// </summary>
+    /// <param name="session">The session GUID</param>
+    /// <param name="lobby">The lobby GUID</param>
+    /// <exception cref="HttpResponseException">If the session is not the lobby owner</exception>
+    /// <response code="200">Game started successfully</response>
+    /// <response code="401">The session is not the lobby owner</response>
+    [HttpPost]
+    [Route("{lobby:guid}/start")]
+    public async Task StartLobby(Guid session, Guid lobby)
+    {
+        var lobbyGrain = _grainFactory.GetGrain<ILobbyGrain>(lobby);
+
+        if (!await lobbyGrain.IsOwner(session))
+            throw new HttpResponseException(HttpStatusCode.Unauthorized);
+    }
+    
+    /// <summary>
+    /// Gets the specified lobby information
+    /// </summary>
+    /// <param name="session">The session GUID</param>
+    /// <param name="lobby">The lobby GUID</param>
+    /// <returns>The lobby State</returns>
+    [HttpGet]
+    [Route("{lobby:guid}")]
+    public async Task<LobbyResponse> GetLobby(Guid session, Guid lobby)
+    {
+        var lobbyGrain = _grainFactory.GetGrain<ILobbyGrain>(lobby);
+        var lobbyState = await lobbyGrain.GetState();
+
+        Response.StatusCode = (int) HttpStatusCode.OK;
+        return new LobbyResponse
+        {
+            Players = lobbyState.Players,
+            State = lobbyState.State
         };
     }
 }

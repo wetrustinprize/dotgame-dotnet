@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using DotGameOrleans.Grains.Lobby;
 
 namespace RestfulAPI.Controllers.v1.Lobby;
 
@@ -11,5 +12,11 @@ public class LobbyResponse
     /// The current players of this lobby
     /// </summary>
     [Required]
-    public HashSet<Guid> Players { get; set; } = null!;
+    public HashSet<Guid> Players { get; init; } = null!;
+
+    /// <summary>
+    /// The current state of this lobby
+    /// </summary>
+    [Required]
+    public LobbyStateEnum State { get; init; }
 }
