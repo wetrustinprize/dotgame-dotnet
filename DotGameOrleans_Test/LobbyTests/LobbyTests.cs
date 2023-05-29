@@ -41,52 +41,47 @@ public class LobbyTests
         var sessionGuid = Guid.NewGuid();
         var lobbyGrain = _cluster.GrainFactory.GetGrain<ILobbyGrain>(Guid.NewGuid());
 
-        await lobbyGrain.Init(Guid.NewGuid(), 4, 4);
-        lobbyGrain.AddPlayer(sessionGuid);
+        await lobbyGrain.Init(sessionGuid, 4, 4);
 
-        Assert.Throws<LobbyAlreadyJoined>(() =>
-            lobbyGrain.AddPlayer(sessionGuid));
+        await Assert.ThrowsAsync<LobbyAlreadyJoined>(async () =>
+            await lobbyGrain.AddPlayer(sessionGuid));
     }
 
     [Fact]
     public async Task JoinLobby_LobbyStarted()
     {
-        var sessionGuid = Guid.NewGuid();
         var lobbyGrain = _cluster.GrainFactory.GetGrain<ILobbyGrain>(Guid.NewGuid());
 
         await lobbyGrain.Init(Guid.NewGuid(), 4, 4);
-        lobbyGrain.AddPlayer(sessionGuid);
+        await lobbyGrain.AddPlayer(Guid.NewGuid());
+        await lobbyGrain.StartGame();
 
-        lobbyGrain.StartGame();
-
-        Assert.Throws<LobbyInProgress>(() =>
-            lobbyGrain.AddPlayer(sessionGuid));
+        await Assert.ThrowsAsync<LobbyInProgress>(async () =>
+            await lobbyGrain.AddPlayer(Guid.NewGuid()));
     }
 
     [Fact]
     public async Task StartGame_NotEnoughPlayers()
     {
-        var sessionGuid = Guid.NewGuid();
         var lobbyGrain = _cluster.GrainFactory.GetGrain<ILobbyGrain>(Guid.NewGuid());
 
-        await lobbyGrain.Init(sessionGuid, 4, 4);
+        await lobbyGrain.Init(Guid.NewGuid(), 4, 4);
 
-        Assert.Throws<NotEnoughPlayers>(() =>
-            lobbyGrain.StartGame());
+        await Assert.ThrowsAsync<NotEnoughPlayers>(async () =>
+            await lobbyGrain.StartGame());
     }
 
     [Fact]
     public async Task StartGame_AlreadyStarted()
     {
-        var sessionGuid = Guid.NewGuid();
         var lobbyGrain = _cluster.GrainFactory.GetGrain<ILobbyGrain>(Guid.NewGuid());
 
-        await lobbyGrain.Init(sessionGuid, 4, 4);
-        lobbyGrain.AddPlayer(sessionGuid);
-        lobbyGrain.StartGame();
+        await lobbyGrain.Init(Guid.NewGuid(), 4, 4);
+        await lobbyGrain.AddPlayer(Guid.NewGuid());
+        await lobbyGrain.StartGame();
 
-        Assert.Throws<LobbyInProgress>(() =>
-            lobbyGrain.StartGame());
+        await Assert.ThrowsAsync<LobbyInProgress>(async () =>
+            await lobbyGrain.StartGame());
     }
 
     [Fact]
@@ -97,7 +92,7 @@ public class LobbyTests
 
         await lobbyGrain.Init(Guid.NewGuid(), 4, 4);
 
-        Assert.Throws<NotInLobby>(() =>
-            lobbyGrain.RemovePlayer(sessionGuid));
+        await Assert.ThrowsAsync<NotInLobby>(async () =>
+            await lobbyGrain.RemovePlayer(sessionGuid));
     }
 }
