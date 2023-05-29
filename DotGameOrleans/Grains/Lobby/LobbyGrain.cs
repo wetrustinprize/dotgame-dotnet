@@ -23,7 +23,7 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
 
     public Task Init(Guid owner, int boardHeight, int boardWidth)
     {
-        _logger.LogDebug($"Creating new lobby for user {owner}.");
+        _logger.LogDebug("Creating new lobby for user {Owner}", owner);
 
         State = new LobbyGrainState
         {
@@ -42,7 +42,8 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
         return Task.FromResult(State.Owner);
     }
 
-    public Task<bool> IsOwner(Guid session) {
+    public Task<bool> IsOwner(Guid session)
+    {
         CheckInitialized();
         return Task.FromResult(session == State.Owner);
     }
@@ -74,16 +75,28 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
 
         if (State.Players.Any(p => p == session))
             throw new LobbyAlreadyJoined(this.GetPrimaryKey(), session);
-        
+
         State.Players.Add(session);
     }
 
     public void RemovePlayer(Guid session)
     {
         CheckInitialized();
-        if(State.Players.All(p => p != session))
+        if (State.Players.All(p => p != session))
             throw new NotInLobby(this.GetPrimaryKey(), session);
-        
-        State.Players.Remove(session);
+
+        switch (State.State)
+        {
+            case LobbyStateEnum.WaitingForPlayers:
+                State.Players.Remove(session);
+                break;
+            case LobbyStateEnum.InProgress:
+                // TODO: Mark the player as "out of game", skip it's turn
+                break;
+            case LobbyStateEnum.Finished:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 }
