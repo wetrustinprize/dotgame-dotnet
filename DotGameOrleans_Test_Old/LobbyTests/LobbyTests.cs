@@ -1,103 +1,101 @@
-using DotGameOrleans_Test.Cluster;
 using DotGameOrleans.Grains.Lobby;
 using Orleans.TestingHost;
 
 namespace DotGameOrleans_Test.LobbyTests;
 
-[Collection(ClusterCollection.Name)]
+[TestClass]
 public class LobbyTests
 {
-    private readonly TestCluster _cluster;
-
-    public LobbyTests(ClusterFixture fixture)
+    private TestCluster _cluster;
+    
+    public LobbyTests()
     {
-        _cluster = fixture.Cluster;
+        var builder = new TestClusterBuilder()
+            .AddSiloBuilderConfigurator<TestSiloConfigurator>();
+        
+        _cluster = builder.Build();
+        _cluster.Deploy();
     }
-
-    [Fact]
+    
+    [TestMethod]
     public async Task NewLobby_OwnerShouldBeSet()
     {
         var ownerGuid = Guid.NewGuid();
         var lobbyGrain = _cluster.GrainFactory.GetGrain<ILobbyGrain>(Guid.NewGuid());
 
         await lobbyGrain.Init(ownerGuid, 4, 4);
-
-        Assert.Equal(ownerGuid, await lobbyGrain.GetOwner());
+        
+        Assert.AreEqual(ownerGuid, await lobbyGrain.GetOwner());
     }
-
-    [Fact]
+    
+    [TestMethod]
+    [ExpectedException(typeof(LobbyNotInitialized))]
     public async Task NewLobby_ShouldNotBeInitialized()
     {
         var lobbyGrain = _cluster.GrainFactory.GetGrain<ILobbyGrain>(Guid.NewGuid());
-
-        await Assert.ThrowsAsync<LobbyNotInitialized>(async () =>
-            await lobbyGrain.GetState()
-        );
+        
+        await lobbyGrain.GetState();
     }
 
-    [Fact]
+    [TestMethod]
+    [ExpectedException(typeof(LobbyAlreadyJoined))]
     public async Task JoinLobby_AlreadyJoined()
     {
         var sessionGuid = Guid.NewGuid();
         var lobbyGrain = _cluster.GrainFactory.GetGrain<ILobbyGrain>(Guid.NewGuid());
-
+        
         await lobbyGrain.Init(Guid.NewGuid(), 4, 4);
         lobbyGrain.AddPlayer(sessionGuid);
-
-        Assert.Throws<LobbyAlreadyJoined>(() =>
-            lobbyGrain.AddPlayer(sessionGuid));
+        lobbyGrain.AddPlayer(sessionGuid);
     }
 
-    [Fact]
+    [TestMethod]
+    [ExpectedException(typeof(LobbyInProgress))]
     public async Task JoinLobby_LobbyStarted()
     {
         var sessionGuid = Guid.NewGuid();
         var lobbyGrain = _cluster.GrainFactory.GetGrain<ILobbyGrain>(Guid.NewGuid());
-
+        
         await lobbyGrain.Init(Guid.NewGuid(), 4, 4);
         lobbyGrain.AddPlayer(sessionGuid);
 
         lobbyGrain.StartGame();
-
-        Assert.Throws<LobbyInProgress>(() =>
-            lobbyGrain.AddPlayer(sessionGuid));
+        lobbyGrain.AddPlayer(sessionGuid);
     }
 
-    [Fact]
+    [TestMethod]
+    [ExpectedException(typeof(NotEnoughPlayers))]
     public async Task StartGame_NotEnoughPlayers()
     {
         var sessionGuid = Guid.NewGuid();
         var lobbyGrain = _cluster.GrainFactory.GetGrain<ILobbyGrain>(Guid.NewGuid());
-
+        
         await lobbyGrain.Init(sessionGuid, 4, 4);
 
-        Assert.Throws<NotEnoughPlayers>(() =>
-            lobbyGrain.StartGame());
+        lobbyGrain.StartGame();
     }
-
-    [Fact]
+    
+    [TestMethod]
+    [ExpectedException(typeof(LobbyInProgress))]
     public async Task StartGame_AlreadyStarted()
     {
         var sessionGuid = Guid.NewGuid();
         var lobbyGrain = _cluster.GrainFactory.GetGrain<ILobbyGrain>(Guid.NewGuid());
-
+        
         await lobbyGrain.Init(sessionGuid, 4, 4);
         lobbyGrain.AddPlayer(sessionGuid);
         lobbyGrain.StartGame();
-
-        Assert.Throws<LobbyInProgress>(() =>
-            lobbyGrain.StartGame());
+        lobbyGrain.StartGame();
     }
-
-    [Fact]
+    
+    [TestMethod]
+    [ExpectedException(typeof(NotInLobby))]
     public async Task LeaveLobby_NotJoined()
     {
         var sessionGuid = Guid.NewGuid();
         var lobbyGrain = _cluster.GrainFactory.GetGrain<ILobbyGrain>(Guid.NewGuid());
-
+        
         await lobbyGrain.Init(Guid.NewGuid(), 4, 4);
-
-        Assert.Throws<NotInLobby>(() =>
-            lobbyGrain.RemovePlayer(sessionGuid));
+        lobbyGrain.RemovePlayer(sessionGuid);
     }
 }

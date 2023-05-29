@@ -1,28 +1,25 @@
+using DotGameOrleans_Test.Cluster;
 using DotGameOrleans.Grains.Session;
 using Orleans.TestingHost;
 
 namespace DotGameOrleans_Test.SessionTests;
 
-[TestClass]
+[Collection(ClusterCollection.Name)]
 public class SessionTests
 {
-    private TestCluster _cluster;
-    
-    public SessionTests()
+    private readonly TestCluster _cluster;
+
+    public SessionTests(ClusterFixture fixture)
     {
-        var builder = new TestClusterBuilder()
-            .AddSiloBuilderConfigurator<TestSiloConfigurator>();
-        
-        _cluster = builder.Build();
-        _cluster.Deploy();
+        _cluster = fixture.Cluster;
     }
-    
-    [TestMethod]
-    [ExpectedException(typeof(SessionNotInitialized))]
+
+    [Fact]
     public async Task NewSession_ShouldNotBeInitialized()
     {
         var grain = _cluster.GrainFactory.GetGrain<ISessionGrain>(Guid.NewGuid());
-        
-        await grain.GetState();
+
+        await Assert.ThrowsAsync<SessionNotInitialized>(async () =>
+            await grain.GetState());
     }
 }
