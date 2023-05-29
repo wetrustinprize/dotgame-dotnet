@@ -52,7 +52,7 @@ public interface ILobbyGrain : IGrainWithGuidKey
     /// Starts the game
     /// </summary>
     /// <exception cref="NotEnoughPlayers">There are just a single player in the lobby</exception>
-    public void StartGame();
+    public Task StartGame();
     
     /// <summary>
     /// Adds a session to the lobby
@@ -60,12 +60,12 @@ public interface ILobbyGrain : IGrainWithGuidKey
     /// <param name="session">The session GUID to be added</param>
     /// <exception cref="LobbyAlreadyJoined">If the <paramref name="session"/> has already been added to this lobby</exception>
     /// <exception cref="LobbyInProgress">If the lobby is already in progress</exception>
-    public void AddPlayer(Guid session);
+    public Task AddPlayer(Guid session);
     
     /// <summary>
     /// Removes a session from the lobby
     /// </summary>
     /// <param name="session">The session GUID</param>
     /// <exception cref="NotInLobby">If the <paramref name="session"/> wasn't in the lobby</exception>
-    public void RemovePlayer(Guid session);
+    public Task RemovePlayer(Guid session);
 }

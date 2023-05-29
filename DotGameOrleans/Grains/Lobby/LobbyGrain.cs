@@ -54,7 +54,7 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
         return Task.FromResult(State);
     }
 
-    public void StartGame()
+    public Task StartGame()
     {
         CheckInitialized();
 
@@ -65,9 +65,11 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
             throw new LobbyInProgress(this.GetPrimaryKey());
 
         State.State = LobbyStateEnum.InProgress;
+
+        return Task.CompletedTask;
     }
 
-    public void AddPlayer(Guid session)
+    public Task AddPlayer(Guid session)
     {
         CheckInitialized();
         if (State.State != LobbyStateEnum.WaitingForPlayers)
@@ -77,9 +79,11 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
             throw new LobbyAlreadyJoined(this.GetPrimaryKey(), session);
 
         State.Players.Add(session);
+
+        return Task.CompletedTask;
     }
 
-    public void RemovePlayer(Guid session)
+    public Task RemovePlayer(Guid session)
     {
         CheckInitialized();
         if (State.Players.All(p => p != session))
@@ -98,5 +102,7 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
             default:
                 throw new ArgumentOutOfRangeException();
         }
+
+        return Task.CompletedTask;
     }
 }
