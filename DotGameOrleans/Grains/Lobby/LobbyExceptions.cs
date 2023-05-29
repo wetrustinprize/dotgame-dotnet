@@ -54,3 +54,12 @@ public class LobbyAlreadyJoined : LobbyException
     {
     }
 }
+
+[Serializable]
+[GenerateSerializer]
+public class NotEnoughPlayers : LobbyException
+{
+    public NotEnoughPlayers(Guid grainId) : base($"Session with grain id {grainId.ToString()} does not have enough players")
+    {
+    }
+}

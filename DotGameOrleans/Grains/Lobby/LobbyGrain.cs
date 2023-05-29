@@ -53,6 +53,19 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
         return Task.FromResult(State);
     }
 
+    public void StartGame()
+    {
+        CheckInitialized();
+
+        if (State.Players.Count <= 1)
+            throw new NotEnoughPlayers(this.GetPrimaryKey());
+
+        if (State.State != LobbyStateEnum.WaitingForPlayers)
+            throw new LobbyInProgress(this.GetPrimaryKey());
+
+        State.State = LobbyStateEnum.InProgress;
+    }
+
     public void AddPlayer(Guid session)
     {
         CheckInitialized();

@@ -49,6 +49,12 @@ public interface ILobbyGrain : IGrainWithGuidKey
     public Task<LobbyGrainState> GetState();
     
     /// <summary>
+    /// Starts the game
+    /// </summary>
+    /// <exception cref="NotEnoughPlayers">There are just a single player in the lobby</exception>
+    public void StartGame();
+    
+    /// <summary>
     /// Adds a session to the lobby
     /// </summary>
     /// <param name="session">The session GUID to be added</param>
