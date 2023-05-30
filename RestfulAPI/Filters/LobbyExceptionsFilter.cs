@@ -29,7 +29,6 @@ public class LobbyExceptionsFilter : IActionFilter, IOrderedFilter
             LobbyAlreadyJoined => new ConflictObjectResult(nameof(LobbyAlreadyJoined)),
             LobbyInProgress => new ConflictObjectResult(nameof(LobbyInProgress)),
             NotEnoughPlayers => new ConflictObjectResult(nameof(NotEnoughPlayers)),
-            LobbyNotInProgress => new ConflictObjectResult(nameof(LobbyNotInProgress)),
             _ => throw context.Exception
         };
 
