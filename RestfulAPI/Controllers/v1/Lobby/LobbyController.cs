@@ -23,17 +23,16 @@ public class LobbyController : Controller
     /// Creates a new lobby and joins it
     /// </summary>
     /// <param name="session">The session GUID</param>
-    /// <param name="data">The data for creating the new lobby</param>
     /// <returns>The created lobby GUID</returns>
     /// <response code="200">Returns the created lobby GUID</response>
     [HttpPost]
-    public async Task<Guid> CreateLobby(Guid session, [FromBody] CreateLobbyDto data)
+    public async Task<Guid> CreateLobby(Guid session)
     {
         var lobbyGuid = Guid.NewGuid();
         var lobbyGrain = _grainFactory.GetGrain<ILobbyGrain>(lobbyGuid);
 
-        await lobbyGrain.Init(session, data.Height, data.Width);
-        
+        await lobbyGrain.Init(session);
+
         return lobbyGuid;
     }
 
@@ -55,7 +54,7 @@ public class LobbyController : Controller
 
         return new LobbyResponse(lobbyState);
     }
-    
+
     /// <summary>
     /// Leaves the specified lobby
     /// </summary>
@@ -69,7 +68,7 @@ public class LobbyController : Controller
         var lobbyGrain = _grainFactory.GetGrain<ILobbyGrain>(lobby);
         await lobbyGrain.RemovePlayer(session);
     }
-    
+
     /// <summary>
     /// Starts the game in the specified lobby
     /// </summary>
@@ -87,7 +86,7 @@ public class LobbyController : Controller
         if (!await lobbyGrain.IsOwner(session))
             throw new HttpResponseException(HttpStatusCode.Unauthorized);
     }
-    
+
     /// <summary>
     /// Gets the specified lobby information
     /// </summary>
@@ -101,7 +100,7 @@ public class LobbyController : Controller
         var lobbyGrain = _grainFactory.GetGrain<ILobbyGrain>(lobby);
         var lobbyState = await lobbyGrain.GetState();
 
-        Response.StatusCode = (int) HttpStatusCode.OK;
+        Response.StatusCode = (int)HttpStatusCode.OK;
         return new LobbyResponse(lobbyState);
     }
 }

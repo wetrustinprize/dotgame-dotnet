@@ -1,14 +1,16 @@
-using DotGameLogic;
+using DotGameOrleans.Grains.Game;
 
 namespace DotGameOrleans.Grains.Lobby;
 
 public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
 {
     private readonly ILogger _logger;
+    private readonly IGrainFactory _grainFactory;
 
-    public LobbyGrain(ILogger<LobbyGrain> logger)
+    public LobbyGrain(ILogger<LobbyGrain> logger, IGrainFactory grainFactory)
     {
         _logger = logger;
+        _grainFactory = grainFactory;
     }
 
     #region Checkers
@@ -21,15 +23,12 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
 
     #endregion
 
-    public Task Init(Guid owner, int boardHeight, int boardWidth)
+    public Task Init(Guid owner)
     {
-        _logger.LogDebug("Creating new lobby for user {Owner}", owner);
-
         State = new LobbyGrainState
         {
             Initialized = true,
-            Owner = owner,
-            Board = new Board(boardHeight, boardWidth)
+            Owner = owner
         };
         State.Players.Add(owner);
 
@@ -54,27 +53,23 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
         return Task.FromResult(State);
     }
 
-    public Task StartGame()
+    public async Task StartGame()
     {
         CheckInitialized();
 
         if (State.Players.Count <= 1)
             throw new NotEnoughPlayers(this.GetPrimaryKey());
 
-        if (State.State != LobbyStateEnum.WaitingForPlayers)
-            throw new LobbyInProgress(this.GetPrimaryKey());
+        // TODO: Specify board height and width
+        var gameGrain = _grainFactory.GetGrain<IGameGrain>(this.GetPrimaryKey());
+        await gameGrain.Init(State.Players, 0, 0);
 
-        State.State = LobbyStateEnum.InProgress;
-
-        return Task.CompletedTask;
+        await ClearStateAsync();
     }
 
     public Task AddPlayer(Guid session)
     {
         CheckInitialized();
-        if (State.State != LobbyStateEnum.WaitingForPlayers)
-            throw new LobbyInProgress(this.GetPrimaryKey());
-
         if (State.Players.Any(p => p == session))
             throw new LobbyAlreadyJoined(this.GetPrimaryKey(), session);
 
@@ -89,19 +84,7 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
         if (State.Players.All(p => p != session))
             throw new NotInLobby(this.GetPrimaryKey(), session);
 
-        switch (State.State)
-        {
-            case LobbyStateEnum.WaitingForPlayers:
-                State.Players.Remove(session);
-                break;
-            case LobbyStateEnum.InProgress:
-                // TODO: Mark the player as "out of game", skip it's turn
-                break;
-            case LobbyStateEnum.Finished:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
+        State.Players.Remove(session);
 
         return Task.CompletedTask;
     }
