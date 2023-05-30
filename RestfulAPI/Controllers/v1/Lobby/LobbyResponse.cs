@@ -19,4 +19,14 @@ public class LobbyResponse
     /// </summary>
     [Required]
     public LobbyStateEnum State { get; init; }
+
+    /// <summary>
+    /// Generates a new lobby response from a lobby grain state
+    /// </summary>
+    /// <param name="state">The lobby grain state</param>
+    public LobbyResponse(LobbyGrainState state)
+    {
+        Players = state.Players;
+        State = state.State;
+    }
 }
