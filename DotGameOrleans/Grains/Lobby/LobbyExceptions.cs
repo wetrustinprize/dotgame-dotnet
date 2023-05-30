@@ -28,15 +28,6 @@ public class LobbyNotInitialized : LobbyException
 
 [Serializable]
 [GenerateSerializer]
-public class LobbyInProgress : LobbyException
-{
-    public LobbyInProgress(Guid grainId) : base($"Session with grain id {grainId.ToString()} is already in process")
-    {
-    }
-}
-
-[Serializable]
-[GenerateSerializer]
 public class NotInLobby : LobbyException
 {
     public NotInLobby(Guid grainId, Guid playerId) : base(
