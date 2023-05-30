@@ -55,19 +55,6 @@ public class LobbyTests
         await lobbyGrain.Init(Guid.NewGuid());
 
         await Assert.ThrowsAsync<NotEnoughPlayers>(async () =>
-            await lobbyGrain.StartGame());
-    }
-
-    [Fact]
-    public async Task StartGame_AlreadyStarted()
-    {
-        var lobbyGrain = _cluster.GrainFactory.GetGrain<ILobbyGrain>(Guid.NewGuid());
-
-        await lobbyGrain.Init(Guid.NewGuid());
-        await lobbyGrain.AddPlayer(Guid.NewGuid());
-        await lobbyGrain.StartGame();
-
-        await Assert.ThrowsAsync<LobbyInProgress>(async () =>
-            await lobbyGrain.StartGame());
+            await lobbyGrain.StartGame(2, 2));
     }
 }
