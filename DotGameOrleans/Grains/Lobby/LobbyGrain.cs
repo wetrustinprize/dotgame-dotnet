@@ -53,7 +53,7 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
         return Task.FromResult(State);
     }
 
-    public async Task StartGame()
+    public async Task StartGame(int height, int width)
     {
         CheckInitialized();
 
@@ -62,7 +62,7 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
 
         // TODO: Specify board height and width
         var gameGrain = _grainFactory.GetGrain<IGameGrain>(this.GetPrimaryKey());
-        await gameGrain.Init(State.Players, 0, 0);
+        await gameGrain.Init(State.Players, height, width);
 
         await ClearStateAsync();
     }

@@ -9,5 +9,13 @@ public class GameGrainState
 
 public interface IGameGrain : IGrainWithGuidKey
 {
+    /// <summary>
+    /// Initializes the game
+    /// </summary>
+    /// <param name="players">The players of the game</param>
+    /// <param name="height">The height of the board</param>
+    /// <param name="width">The width of the board</param>
+    /// <returns></returns>
+    /// <exception cref="InvalidGameBoardSize">Inputted board size is invalid</exception>
     public Task Init(HashSet<Guid> players, int height, int width);
 }

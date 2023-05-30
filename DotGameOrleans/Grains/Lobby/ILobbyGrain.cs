@@ -36,17 +36,18 @@ public interface ILobbyGrain : IGrainWithGuidKey
     public Task<LobbyGrainState> GetState();
 
     /// <summary>
-    /// Starts the game
+    /// Starts the game and empty the lobby
     /// </summary>
+    /// <param name="height">The board height</param>
+    /// <param name="width">The board width</param>
     /// <exception cref="NotEnoughPlayers">There are just a single player in the lobby</exception>
-    public Task StartGame();
+    public Task StartGame(int height, int width);
 
     /// <summary>
     /// Adds a session to the lobby
     /// </summary>
     /// <param name="session">The session GUID to be added</param>
     /// <exception cref="LobbyAlreadyJoined">If the <paramref name="session"/> has already been added to this lobby</exception>
-    /// <exception cref="LobbyInProgress">If the lobby is already in progress</exception>
     public Task AddPlayer(Guid session);
 
     /// <summary>
