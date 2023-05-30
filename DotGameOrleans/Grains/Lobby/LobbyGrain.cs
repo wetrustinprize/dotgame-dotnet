@@ -60,7 +60,6 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
         if (State.Players.Count <= 1)
             throw new NotEnoughPlayers(this.GetPrimaryKey());
 
-        // TODO: Specify board height and width
         var gameGrain = _grainFactory.GetGrain<IGameGrain>(this.GetPrimaryKey());
         await gameGrain.Init(State.Players, height, width);
 
