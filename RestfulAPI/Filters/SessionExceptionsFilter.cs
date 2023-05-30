@@ -24,7 +24,7 @@ public class SessionExceptionsFilter : IActionFilter, IOrderedFilter
 
         context.Result = context.Exception switch
         {
-            SessionNotInitialized => new UnauthorizedResult(),
+            SessionNotInitialized => new UnauthorizedObjectResult(nameof(SessionNotInitialized)),
             _ => throw context.Exception
         };
 

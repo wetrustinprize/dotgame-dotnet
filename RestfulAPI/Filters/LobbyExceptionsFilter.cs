@@ -24,7 +24,12 @@ public class LobbyExceptionsFilter : IActionFilter, IOrderedFilter
 
         context.Result = context.Exception switch
         {
-            LobbyNotInitialized => new NotFoundResult(),
+            LobbyNotInitialized => new NotFoundObjectResult(nameof(LobbyNotInitialized)),
+            NotInLobby => new UnauthorizedObjectResult(nameof(NotInLobby)),
+            LobbyAlreadyJoined => new ConflictObjectResult(nameof(LobbyAlreadyJoined)),
+            LobbyInProgress => new ConflictObjectResult(nameof(LobbyInProgress)),
+            NotEnoughPlayers => new ConflictObjectResult(nameof(NotEnoughPlayers)),
+            LobbyNotInProgress => new ConflictObjectResult(nameof(LobbyNotInProgress)),
             _ => throw context.Exception
         };
 
