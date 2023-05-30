@@ -51,10 +51,9 @@ public class LobbyController : Controller
         var lobbyGrain = _grainFactory.GetGrain<ILobbyGrain>(lobby);
         var lobbyState = await lobbyGrain.GetState();
 
-        return new LobbyResponse
-        {
-            Players = lobbyState.Players
-        };
+        await lobbyGrain.AddPlayer(session);
+
+        return new LobbyResponse(lobbyState);
     }
     
     /// <summary>
@@ -65,12 +64,10 @@ public class LobbyController : Controller
     /// <response code="200">Left the lobby successfully</response>
     [HttpPost]
     [Route("{lobby:guid}/leave")]
-    public Task LeaveLobby(Guid session, Guid lobby)
+    public async Task LeaveLobby(Guid session, Guid lobby)
     {
         var lobbyGrain = _grainFactory.GetGrain<ILobbyGrain>(lobby);
-        lobbyGrain.RemovePlayer(session);
-
-        return Task.CompletedTask;
+        await lobbyGrain.RemovePlayer(session);
     }
     
     /// <summary>
@@ -105,10 +102,6 @@ public class LobbyController : Controller
         var lobbyState = await lobbyGrain.GetState();
 
         Response.StatusCode = (int) HttpStatusCode.OK;
-        return new LobbyResponse
-        {
-            Players = lobbyState.Players,
-            State = lobbyState.State
-        };
+        return new LobbyResponse(lobbyState);
     }
 }
