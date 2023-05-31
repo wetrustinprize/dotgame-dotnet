@@ -5,7 +5,7 @@ namespace RestfulAPI.Controllers.v1.Lobby;
 /// <summary>
 /// Information needed to create a new lobby
 /// </summary>
-public class CreateLobbyDto
+public struct CreateLobbyDto
 {
     /// <summary>
     /// The board height
@@ -13,7 +13,7 @@ public class CreateLobbyDto
     [Required]
     [Range(2, 100)]
     public int Height { get; set; }
-    
+
     /// <summary>
     /// The board width
     /// </summary>
