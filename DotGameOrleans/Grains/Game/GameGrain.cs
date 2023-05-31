@@ -19,13 +19,14 @@ public class GameGrain : Grain<GameGrainState>, IGameGrain
     /// </summary>
     /// <param name="session">The session to check</param>
     /// <exception cref="NotInGameException">If the session does not exist or has left</exception>
-    private void CheckInGame(Guid session)
+    private GamePlayer CheckInGame(Guid session)
     {
-        var exists = State.Players.Any(player => player.Session == session);
-        var left = State.Players.Any(player => player.Session == session && player.Left);
+        var player = State.Players.FirstOrDefault(player => player.Session == session);
 
-        if (!exists || left)
+        if (player == null || player.Left)
             throw new NotInGameException(this.GetPrimaryKey(), session);
+
+        return player;
     }
 
     #endregion
@@ -61,7 +62,10 @@ public class GameGrain : Grain<GameGrainState>, IGameGrain
 
     public Task RemoveSession(Guid session)
     {
-        throw new NotImplementedException();
+        var player = CheckInGame(session);
+        player.Left = true;
+        
+        return Task.CompletedTask;
     }
 
     public Task<bool> IsOwner(Guid session) => Task.FromResult(session == State.Owner);

@@ -14,6 +14,8 @@ public class GameTests
         _cluster = fixture.Cluster;
     }
 
+    #region New Game
+
     [Fact]
     public async Task NewGame_ShouldNotBeInitialized()
     {
@@ -35,6 +37,8 @@ public class GameTests
         );
     }
 
+    #endregion
+
     [Fact]
     public async Task LeftGame_RaiseErrorIfNotInIt()
     {
@@ -43,6 +47,9 @@ public class GameTests
         var owner = Guid.NewGuid();
         var player = Guid.NewGuid();
 
-        await gameGrain.Init(new[] { owner, player }, owner, 4, 4);
+        await gameGrain.Init(new[] { owner, Guid.NewGuid(), player }, owner, 4, 4);
+        await gameGrain.RemoveSession(player);
+
+        await Assert.ThrowsAsync<NotInGameException>(async () => await gameGrain.RemoveSession(player));
     }
 }
