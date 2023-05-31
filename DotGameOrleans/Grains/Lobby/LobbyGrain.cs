@@ -61,7 +61,7 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
             throw new NotEnoughPlayersException(this.GetPrimaryKey());
 
         var gameGrain = _grainFactory.GetGrain<IGameGrain>(this.GetPrimaryKey());
-        await gameGrain.Init(State.Players, height, width);
+        await gameGrain.Init(State.Players, State.Owner, height, width);
 
         await ClearStateAsync();
     }
