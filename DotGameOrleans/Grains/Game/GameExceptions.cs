@@ -19,13 +19,40 @@ public class GameException : Exception
 
 [Serializable]
 [GenerateSerializer]
-public class InvalidGameBoardSize : GameException
+public class GameNotInitializedException : GameException
 {
-    public InvalidGameBoardSize(
-        int inputtedWidth,
-        int inputtedHeight,
-        int minimum
-    ) : base($"Can't make a board with {inputtedWidth} by {inputtedHeight}, minimum is {minimum} by {minimum}")
+    public GameNotInitializedException(Guid grain) : base(
+        $"Game with grain id {grain.ToString()} is not initialized")
+    {
+    }
+}
+
+[Serializable]
+[GenerateSerializer]
+public class NotInGameException : GameException
+{
+    public NotInGameException(Guid grain, Guid session) : base(
+        $"Session with id {session.ToString()} is not in game with grain id {grain.ToString()}")
+    {
+    }
+}
+
+[Serializable]
+[GenerateSerializer]
+public class OwnerNotInGameException : GameException
+{
+    public OwnerNotInGameException(Guid grain, Guid session) : base(
+        $"Session is missing owner id ({session.ToString()}) from players in game with grain id {grain.ToString()}")
+    {
+    }
+}
+
+[Serializable]
+[GenerateSerializer]
+public class NotInTurnException : GameException
+{
+    public NotInTurnException(Guid grain, Guid session) : base(
+        $"Session with id {session.ToString()} is not in turn in game with grain id {grain.ToString()}")
     {
     }
 }
