@@ -17,5 +17,5 @@ public interface IGameGrain : IGrainWithGuidKey
     /// <param name="width">The width of the board</param>
     /// <returns></returns>
     /// <exception cref="InvalidGameBoardSize">Inputted board size is invalid</exception>
-    public Task Init(HashSet<Guid> players, int height, int width);
+    public Task Init(IEnumerable<Guid> players, int height, int width);
 }
