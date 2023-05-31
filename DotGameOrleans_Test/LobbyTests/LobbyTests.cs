@@ -30,7 +30,7 @@ public class LobbyTests
     {
         var lobbyGrain = _cluster.GrainFactory.GetGrain<ILobbyGrain>(Guid.NewGuid());
 
-        await Assert.ThrowsAsync<LobbyNotInitialized>(async () =>
+        await Assert.ThrowsAsync<LobbyNotInitializedException>(async () =>
             await lobbyGrain.GetState()
         );
     }
@@ -43,7 +43,7 @@ public class LobbyTests
 
         await lobbyGrain.Init(sessionGuid);
 
-        await Assert.ThrowsAsync<LobbyAlreadyJoined>(async () =>
+        await Assert.ThrowsAsync<LobbyAlreadyJoinedException>(async () =>
             await lobbyGrain.AddPlayer(sessionGuid));
     }
 
@@ -54,7 +54,7 @@ public class LobbyTests
 
         await lobbyGrain.Init(Guid.NewGuid());
 
-        await Assert.ThrowsAsync<NotEnoughPlayers>(async () =>
+        await Assert.ThrowsAsync<NotEnoughPlayersException>(async () =>
             await lobbyGrain.StartGame(2, 2));
     }
 }

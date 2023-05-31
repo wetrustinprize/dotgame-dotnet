@@ -18,7 +18,7 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
     private void CheckInitialized()
     {
         if (!State.Initialized)
-            throw new LobbyNotInitialized(this.GetPrimaryKey());
+            throw new LobbyNotInitializedException(this.GetPrimaryKey());
     }
 
     #endregion
@@ -58,7 +58,7 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
         CheckInitialized();
 
         if (State.Players.Count <= 1)
-            throw new NotEnoughPlayers(this.GetPrimaryKey());
+            throw new NotEnoughPlayersException(this.GetPrimaryKey());
 
         var gameGrain = _grainFactory.GetGrain<IGameGrain>(this.GetPrimaryKey());
         await gameGrain.Init(State.Players, height, width);
@@ -70,7 +70,7 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
     {
         CheckInitialized();
         if (State.Players.Any(p => p == session))
-            throw new LobbyAlreadyJoined(this.GetPrimaryKey(), session);
+            throw new LobbyAlreadyJoinedException(this.GetPrimaryKey(), session);
 
         State.Players.Add(session);
 
@@ -81,7 +81,7 @@ public class LobbyGrain : Grain<LobbyGrainState>, ILobbyGrain
     {
         CheckInitialized();
         if (State.Players.All(p => p != session))
-            throw new NotInLobby(this.GetPrimaryKey(), session);
+            throw new NotInLobbyException(this.GetPrimaryKey(), session);
 
         State.Players.Remove(session);
 
