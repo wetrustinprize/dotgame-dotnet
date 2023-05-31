@@ -21,7 +21,8 @@ public class LobbyException : Exception
 [GenerateSerializer]
 public class LobbyNotInitializedException : LobbyException
 {
-    public LobbyNotInitializedException(Guid grainId) : base($"Session with grain id {grainId.ToString()} is not initialized")
+    public LobbyNotInitializedException(Guid grain) : base(
+        $"Session with grain id {grain.ToString()} is not initialized")
     {
     }
 }
@@ -30,8 +31,8 @@ public class LobbyNotInitializedException : LobbyException
 [GenerateSerializer]
 public class NotInLobbyException : LobbyException
 {
-    public NotInLobbyException(Guid grainId, Guid playerId) : base(
-        $"Player with id {playerId.ToString()} is not in session with grain id {grainId.ToString()}")
+    public NotInLobbyException(Guid grain, Guid player) : base(
+        $"Player with id {player.ToString()} is not in session with grain id {grain.ToString()}")
     {
     }
 }
@@ -40,8 +41,8 @@ public class NotInLobbyException : LobbyException
 [GenerateSerializer]
 public class LobbyAlreadyJoinedException : LobbyException
 {
-    public LobbyAlreadyJoinedException(Guid grainId, Guid playerId) : base(
-        $"Player with id {playerId.ToString()} already joined session with grain id {grainId.ToString()}")
+    public LobbyAlreadyJoinedException(Guid grain, Guid player) : base(
+        $"Player with id {player.ToString()} already joined session with grain id {grain.ToString()}")
     {
     }
 }
@@ -50,7 +51,8 @@ public class LobbyAlreadyJoinedException : LobbyException
 [GenerateSerializer]
 public class NotEnoughPlayersException : LobbyException
 {
-    public NotEnoughPlayersException(Guid grainId) : base($"Session with grain id {grainId.ToString()} does not have enough players")
+    public NotEnoughPlayersException(Guid grain) : base(
+        $"Session with grain id {grain.ToString()} does not have enough players")
     {
     }
 }
