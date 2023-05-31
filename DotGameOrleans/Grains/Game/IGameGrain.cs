@@ -4,7 +4,7 @@ using DotGameLogic.Exceptions;
 namespace DotGameOrleans.Grains.Game;
 
 [GenerateSerializer]
-public record GameGrainState
+public class GameGrainState
 {
     [Id(0)] public bool Initialized { get; init; }
     [Id(1)] public List<GamePlayer> Players { get; init; } = new();
