@@ -1,10 +1,14 @@
+using DotGameLogic;
+
 namespace DotGameOrleans.Grains.Game;
 
 [GenerateSerializer]
 public class GameGrainState
 {
     [Id(0)] public bool Initialized { get; init; }
-    [Id(1)] public HashSet<Guid> Players { get; } = new();
+    [Id(1)] public List<GamePlayer> Players { get; init; } = new();
+    [Id(2)] public int CurrentPlayerIndex { get; set; } = -1;
+    [Id(3)] public Board Board { get; init; } = null!;
 }
 
 public interface IGameGrain : IGrainWithGuidKey
