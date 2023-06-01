@@ -3,9 +3,12 @@ using DotGameLogic.Exceptions;
 
 namespace DotGameLogic;
 
-/// <summary>
-/// The main class for a DotGame Board
-/// </summary>
+public struct BoardConfig
+{
+    public int Height { get; init; }
+    public int Width { get; init; }
+}
+
 public class Board
 {
     public const int MinimumSize = 2;
@@ -17,14 +20,14 @@ public class Board
 
     public List<Square> BoardState { get; } = new();
 
-    public Board(int height, int width)
+    public Board(BoardConfig config)
     {
-        if (height <= 1 || width <= 1)
-            throw new InvalidBoardSize(height, width, MinimumSize);
-        
-        Height = height;
-        Width = width;
-        
+        if (config.Height <= 1 || config.Width <= 1)
+            throw new InvalidBoardSize(config.Height, config.Width, MinimumSize);
+
+        Height = config.Height;
+        Width = config.Width;
+
         ResetBoard();
     }
 

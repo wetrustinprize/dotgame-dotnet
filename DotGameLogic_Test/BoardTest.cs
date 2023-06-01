@@ -10,23 +10,39 @@ public class BoardTest
     {
         Assert.Equal(
             4,
-            new Board(2, 2).BoardState.Count
+            new Board(new BoardConfig
+            {
+                Height = 2,
+                Width = 2
+            }).BoardState.Count
         );
 
         Assert.Equal(
             6,
-            new Board(2, 3).BoardState.Count
+            new Board(new BoardConfig
+            {
+                Height = 2,
+                Width = 3
+            }).BoardState.Count
         );
 
         Assert.Equal(
             9,
-            new Board(3, 3).BoardState.Count
+            new Board(new BoardConfig
+            {
+                Height = 3,
+                Width = 3
+            }).BoardState.Count
         );
     }
 
     [Fact]
     public void NewBoard_MinimunSize()
     {
-        Assert.Throws<InvalidBoardSize>(() => new Board(1, 1));
+        Assert.Throws<InvalidBoardSize>(() => new Board(new BoardConfig
+        {
+            Height = 1,
+            Width = 1
+        }));
     }
 }
