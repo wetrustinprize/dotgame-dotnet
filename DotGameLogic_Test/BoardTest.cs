@@ -45,4 +45,18 @@ public class BoardTest
             Width = 1
         }));
     }
+
+    [Fact]
+    public void BoardPosition_OutOfBounds()
+    {
+        var board = new Board(new BoardConfig
+        {
+            Height = 2,
+            Width = 2
+        });
+
+        Assert.Throws<InvalidBoardPositionException>(() => board.GetIndex(2, 3));
+        Assert.Throws<InvalidBoardPositionException>(() => board.GetIndex(4, 3));
+        Assert.Throws<InvalidBoardPositionException>(() => board.GetIndex(3, 2));
+    }
 }
