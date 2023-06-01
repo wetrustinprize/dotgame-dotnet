@@ -1,34 +1,32 @@
 using DotGameLogic;
 using DotGameLogic.Exceptions;
 
-namespace DotGameLogic_Test.BoardTests;
+namespace DotGameLogic_Test;
 
-[TestClass]
 public class BoardTest
 {
-    [TestMethod]
+    [Fact]
     public void NewBoard_CorrectBoardSize()
     {
-        Assert.AreEqual(
+        Assert.Equal(
             4,
             new Board(2, 2).BoardState.Count
         );
 
-        Assert.AreEqual(
+        Assert.Equal(
             6,
             new Board(2, 3).BoardState.Count
         );
 
-        Assert.AreEqual(
+        Assert.Equal(
             9,
             new Board(3, 3).BoardState.Count
         );
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(InvalidBoardSize))]
+    [Fact]
     public void NewBoard_MinimunSize()
     {
-        var _ = new Board(1, 1);
+        Assert.Throws<InvalidBoardSize>(() => new Board(1, 1));
     }
 }

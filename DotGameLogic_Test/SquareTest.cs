@@ -2,12 +2,11 @@ using DotGameLogic;
 using DotGameLogic.Enums;
 using DotGameLogic.Exceptions;
 
-namespace DotGameLogic_Test.BoardTests;
+namespace DotGameLogic_Test;
 
-[TestClass]
 public class SquareTest
 {
-    [TestMethod]
+    [Fact]
     public void ConnectedSquares_ShareLines()
     {
         var top = new Square();
@@ -15,33 +14,34 @@ public class SquareTest
         bottom.ConnectSquare(Position.Top, top);
 
         top.SetLine(Position.Bottom, 1);
-        
-        Assert.AreEqual(
+
+        Assert.Equal(
             top.GetLine(Position.Bottom),
             bottom.GetLine(Position.Top)
         );
     }
-    
-    [TestMethod]
-    [ExpectedException(typeof(AlreadyConnected))]
+
+
+    [Fact]
     public void Squares_CantConnectOpposingSides()
     {
         var top = new Square();
         var bottom = new Square();
         bottom.ConnectSquare(Position.Top, top);
-        top.ConnectSquare(Position.Bottom, bottom);
+        Assert.Throws<AlreadyConnected>(() =>
+            top.ConnectSquare(Position.Bottom, bottom));
     }
 
-    [TestMethod]
+    [Fact]
     public void SettingLine_OnCompleteSquare_MakesWinner()
     {
         var square = new Square();
-        
+
         square.SetLine(Position.Top, 1);
         square.SetLine(Position.Bottom, 1);
         square.SetLine(Position.Left, 1);
-        
-        Assert.IsTrue(square.SetLine(Position.Right, 1));
-        Assert.AreEqual(1, square.Owner);
+
+        Assert.True(square.SetLine(Position.Right, 1));
+        Assert.Equal(1, square.Owner);
     }
 }
