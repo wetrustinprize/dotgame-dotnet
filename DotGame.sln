@@ -4,8 +4,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotGameLogic", "DotGameLogi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logic", "Logic", "{BA91F048-96DC-4412-AC0D-117B5751841C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Orleans", "Orleans", "{08194F43-8A11-406A-B866-43FC2533CD9B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotGameLogic_Test", "DotGameLogic_Test\DotGameLogic_Test.csproj", "{52E5435E-8BCE-4996-AD8B-0F2F88A25DB9}"
 EndProject
 Global
