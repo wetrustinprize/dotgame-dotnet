@@ -11,13 +11,14 @@ public class SquareTest
     {
         var top = new Square();
         var bottom = new Square();
+        var player = new Player();
         bottom.ConnectSquare(Position.Top, top);
 
-        top.SetLine(Position.Bottom, 1);
+        top.SetLine(Position.Bottom, player);
 
         Assert.Equal(
-            top.GetLine(Position.Bottom),
-            bottom.GetLine(Position.Top)
+            top.GetLineOwner(Position.Bottom),
+            bottom.GetLineOwner(Position.Top)
         );
     }
 
@@ -36,12 +37,13 @@ public class SquareTest
     public void SettingLine_OnCompleteSquare_MakesWinner()
     {
         var square = new Square();
+        var player = new Player();
 
-        square.SetLine(Position.Top, 1);
-        square.SetLine(Position.Bottom, 1);
-        square.SetLine(Position.Left, 1);
+        square.SetLine(Position.Top, player);
+        square.SetLine(Position.Bottom, player);
+        square.SetLine(Position.Left, player);
 
-        Assert.True(square.SetLine(Position.Right, 1));
-        Assert.Equal(1, square.Owner);
+        Assert.True(square.SetLine(Position.Right, player));
+        Assert.Equal(player, square.Owner);
     }
 }
