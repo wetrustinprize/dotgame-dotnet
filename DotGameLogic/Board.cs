@@ -18,6 +18,9 @@ public class Board
 
     public int TotalSquares => Height * Width;
 
+    public int TotalNonFilledSquares => BoardState.Count(s => s.Owner == null);
+    public int TotalFilledSquares => BoardState.Count(s => s.Owner != null);
+
     public List<Square> BoardState { get; } = new();
 
     public Board(BoardConfig config)
