@@ -1,5 +1,6 @@
 using DotGameMemoryServer;
 using DotGameRestful.Game.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 #pragma warning disable CS1591
@@ -25,17 +26,6 @@ public class GameController : Controller
     [Route("")]
     public ActionResult<Guid> NewGame() => _memoryServer.CreateInstance().Id;
 
-
-    /// <summary>
-    /// Gets information about a specific Game
-    /// </summary>
-    [HttpGet]
-    [Route("{gameId:guid}")]
-    public ActionResult<object> GetGame(Guid gameId)
-    {
-        throw new NotImplementedException();
-    }
-
     /// <summary>
     /// Joins a game.
     /// </summary>
@@ -59,13 +49,26 @@ public class GameController : Controller
     }
 
     /// <summary>
+    /// Gets information about a specific Game
+    /// </summary>
+    /// <response code="200">Successfully got the game information.</response>
+    /// <response code="404">The specified game was not found.</response>
+    /// <response code="401">You left or has been kicked out of this game.</response>
+    [HttpGet]
+    [Route("{gameId:guid}"), Authorize]
+    public ActionResult<object> GetGame(Guid gameId)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
     /// Leaves the specified Game.
     /// </summary>
     /// <response code="200">Successfully left the game.</response>
     /// <response code="404">The specified game was not found.</response>
     /// <response code="401">You've already left or has been kicked out of this game.</response>
     [HttpPost]
-    [Route("{gameId:guid}/leave")]
+    [Route("{gameId:guid}/leave"), Authorize]
     public ActionResult LeaveGame(Guid gameId)
     {
         throw new NotImplementedException();
@@ -78,7 +81,7 @@ public class GameController : Controller
     /// <response code="404">The specified game was not found, or you're not in this game.</response>
     /// <response code="401">You're not the owner of this game.</response>
     [HttpPost]
-    [Route("{gameId:guid}/remove")]
+    [Route("{gameId:guid}/remove"), Authorize]
     public ActionResult RemovePlayer([FromBody] RemovePlayerDTO dto, Guid gameId)
     {
         throw new NotImplementedException();
@@ -91,7 +94,7 @@ public class GameController : Controller
     /// <response code="404">The specified game was not found, or you're not in this game.</response>
     /// <response code="401">It's not your turn, or you've left/kicked from the game.</response>
     [HttpPost]
-    [Route("{gameId:guid}/play")]
+    [Route("{gameId:guid}/play"), Authorize]
     public ActionResult Play(Guid gameId)
     {
         throw new NotImplementedException();
