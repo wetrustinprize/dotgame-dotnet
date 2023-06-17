@@ -19,6 +19,10 @@ public class Instance
         _players = new List<Player>();
     }
 
+    #region Player
+
+    public bool IsOwner(Guid guid) => _players.Count > 0 ? _players[0].Id == guid : false;
+
     /// <summary>
     /// Adds a new player to the players list and Game.
     /// It only adds if the game didn't start yet.
@@ -67,4 +71,6 @@ public class Instance
 
         return Game;
     }
+
+    #endregion
 }
