@@ -19,7 +19,7 @@ public class ServerConfiguration
     public double WipeAfter { get; init; } = TimeSpan.FromHours(1).Milliseconds;
 }
 
-public class Server
+public class MemoryServer
 {
     private List<Instance> Instances { get; } = new();
     private Dictionary<InstanceCode, Instance> InstancesByCode { get; } = new();
@@ -27,7 +27,11 @@ public class Server
     private Timer? WipeTimer { get; init; }
     private double WipeAfter { get; init; }
 
-    public Server(ServerConfiguration configuration)
+    public MemoryServer() : this(new ServerConfiguration())
+    {
+    }
+
+    public MemoryServer(ServerConfiguration configuration)
     {
         if (configuration.WipeCheckAfter > 0)
         {
